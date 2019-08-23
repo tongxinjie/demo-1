@@ -1,0 +1,28 @@
+server:
+  port: 8069
+
+spring:
+  profiles:
+    active: dev
+#  jackson:
+#    time-zone: GMT+8
+    
+---
+spring:
+  profiles: dev
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/userinfo?useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: 
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+
+    
+
+mybatis:
+  mapperLocations: classpath:com/example/demo/mapping/*.xml
+#  configLocation: classpath:mybatis-config.xml
+  typeAliasesPackage: com.example.demo.pojo
+
+
+    

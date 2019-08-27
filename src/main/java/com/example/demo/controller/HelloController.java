@@ -220,7 +220,7 @@ public class HelloController {
 	    	 long size= mutipartfile.getSize();
 		     String name = mutipartfile.getOriginalFilename();
 		     System.out.println("filename: "+ name);
-		     String filepath= "D:\\暑期实习\\vuetest\\static\\uploads";
+		     String filepath= "D:\\暑期实习\\vue-wechat-master\\static\\uploads";
 		     File newfile=new File(filepath);
 	            if(!newfile.exists()){
 	                newfile.mkdirs();

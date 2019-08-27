@@ -33,6 +33,8 @@ import com.alibaba.fastjson.JSON;
 import java.text.SimpleDateFormat;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 //import java.util.Date;
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -127,6 +129,25 @@ public class ChatController {
 	    }
 		
 		//更新聊天记录
+		@RequestMapping(value="/MsgFrom",method = RequestMethod.POST)
+		@ResponseBody
+		public String MsgFrom(HttpServletRequest request, HttpServletResponse response) {   	
+			String fromid = request.getParameter("fromid");
+			
+			User user = userService.findUserByUserId(fromid);
+			String fromname = user.getLoginName();
+			String avatar = user.getAvatar();
+			JSONObject jsonObj =new JSONObject();
+    		jsonObj.put("fromname", fromname);
+    		jsonObj.put("avatar", avatar);
+			
+			System.out.println("frommsg: "+ fromid);
+			return JSON.toJSONString(jsonObj);
+			
+	    }
+//		
+		
+		//更新聊天记录
 				@RequestMapping(value="/insertMsg",method = RequestMethod.POST)
 				@ResponseBody
 				public String insertMsg(HttpServletRequest request, HttpServletResponse response) {   	
@@ -144,6 +165,7 @@ public class ChatController {
 					chatroom.setMsg(msg);
 					chatroom.setText(text);
 					chatroom.setUnread(1);
+					
 					int i = chatroomService.InsertNewMsg(chatroom);
 					if (i==1) {
 						return JSON.toJSONString(chatroom);
@@ -166,7 +188,7 @@ public class ChatController {
 				         Date date1 = new Date(currentTime);
 					     String name = formatter.format(date1)+ "-"+mutipartfile.getOriginalFilename();
 					     System.out.println("filename: "+ name);
-					     String filepath= "D:\\暑期实习\\vuetest\\static\\chatroom";
+					     String filepath= "D:\\暑期实习\\vue-wechat-master\\static\\chatroom";
 //					     String filepath=request.getServletContext().getRealPath("/")+"files\\";
 					     File newfile=new File(filepath);
 				            if(!newfile.exists()){

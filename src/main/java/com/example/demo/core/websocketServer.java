@@ -72,6 +72,7 @@ public class websocketServer {
     
     @OnMessage
     public void onMessage(String message, Session session) {
+    	System.out.println("群发来自客户端的消息:" + message);
     	JSONObject object = (JSONObject) JSONObject.parse(message);
     	String sender =  object.get("frommsg").toString();
     	String receiver =  object.get("tomsg").toString();;
@@ -83,13 +84,7 @@ public class websocketServer {
         		System.out.println("群发来自客户端的消息:" + message);
                 sendtoAll(message);
         		
-        	}else if(receiver.equals("chatlist")) { 		
-//        		System.out.println("在消息列表页面");
-        		sendtoUser(message);
-        		
-        	}
-        	
-        	else {
+        	}else {
         		sendtoUser(message);
         	}
         	

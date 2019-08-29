@@ -22,6 +22,8 @@ import com.example.demo.pojo.Chat;
 import com.example.demo.pojo.Chatroom;
 import com.example.demo.pojo.User;
 import com.example.demo.pojo.ConcatTable;
+import com.example.demo.pojo.GroupTable;
+import com.example.demo.pojo.Grouplist;
 import com.example.demo.service.Chatservice;
 import com.example.demo.service.Userservice;
 import com.example.demo.service.Chatroomservice;
@@ -81,6 +83,19 @@ public class ChatController {
 			return null;
 		}
     }
+	
+	@RequestMapping(value="/setGroupUnread",method = RequestMethod.POST)
+	@ResponseBody
+	public String setGroupUnread(HttpServletRequest request, HttpServletResponse response) {
+		String wechatid = request.getParameter("wechatid");
+		String wechathost = request.getParameter("host");
+		int unread = 0;
+	    int i = chatroomService.ResetGroupUnreadNum(wechatid,unread);
+		if(i!=0) {
+			return "reset success";			
+		}else {
+			return null;
+		}}
 	
 		
 //		获取聊天记录
@@ -145,16 +160,19 @@ public class ChatController {
 					String msg = request.getParameter("msg");
 					String tomsg = request.getParameter("tomsg");
 					String strtext = request.getParameter("text");
+					String strgroup = request.getParameter("isgroup");
 					int text = Integer.parseInt(strtext);
+					int isgroup = Integer.parseInt(strgroup);
 //					int label = Integer.parseInt(labelstr);
 					
-					System.out.println("frommsg: "+ frommsg);
+					System.out.println("strgroup: "+ isgroup);
 					Chatroom chatroom = new Chatroom();
 					chatroom.setFrommsg(frommsg);
 					chatroom.setTomsg(tomsg);
 					chatroom.setMsg(msg);
 					chatroom.setText(text);
 					chatroom.setUnread(1);
+					chatroom.setIsgroup(isgroup);
 					
 					int i = chatroomService.InsertNewMsg(chatroom);
 					if (i==1) {
@@ -212,6 +230,44 @@ public class ChatController {
 								
 					
 			    }
+				
+				//更新聊天记录
+				@RequestMapping(value="/getLoginName",method = RequestMethod.POST)
+				@ResponseBody
+				public String getLoginName(HttpServletRequest request, HttpServletResponse response) {   	
+					String fromid = request.getParameter("userid");
+					User user = userService.findUserByUserId(fromid);
+					String fromname = user.getLoginName();
+					System.out.println("frommsg----: "+ fromname);
+					return fromname;
+					
+			    }
+				
+				@RequestMapping(value="/getGroupchatlist",method = RequestMethod.POST)
+				@ResponseBody
+				public String getGroupchatlist(HttpServletRequest request, HttpServletResponse response) {   	
+					
+					String groupid = request.getParameter("wechatid");  //群聊
+					String wechathost = request.getParameter("host"); 
+					List<GroupTable> group = chatroomService.findGroupChatlistByWechatId(groupid);
+					return JSON.toJSONString(group);	
+					
+			    }
+				
+				//更新聊天记录
+				@RequestMapping(value="/getGroupName",method = RequestMethod.POST)
+				@ResponseBody
+				public String getGroupName(HttpServletRequest request, HttpServletResponse response) {   	
+					String fromid = request.getParameter("groupid");
+					Grouplist grouplist = chatroomService.findGroupByGroupId(fromid);
+					String fromname = grouplist.getGroupname();
+					return fromname;
+					
+			    }
+				
+				
+				
+				
 	}
 
 

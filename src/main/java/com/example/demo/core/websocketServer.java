@@ -2,14 +2,21 @@ package com.example.demo.core;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import com.example.demo.core.ApplicationContextRegister;
 import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.ContextLoader;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.pojo.Chatroom;
+import com.example.demo.pojo.ConcatTable;
+import com.example.demo.pojo.Grouplist;
+import com.example.demo.pojo.User;
 import com.example.demo.service.Chatroomservice;
+//import com.example.demo.service.IDataServcie;
+import com.example.demo.service.Userservice;
 
 import javax.annotation.Resource;
 
@@ -21,6 +28,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 
@@ -29,6 +37,14 @@ import java.util.Set;
 //访问服务端的url地址
 @ServerEndpoint(value = "/websocket/{id}")
 public class websocketServer {
+
+    
+    private ApplicationContext act = ApplicationContextRegister.getApplicationContext();
+    private Userservice userService = act.getBean(Userservice.class);
+    private Chatroomservice chatroomService = act.getBean(Chatroomservice.class);
+    
+	
+	
     private static int onlineCount = 0;
     private static ConcurrentHashMap<String, websocketServer> webSocketSet = new ConcurrentHashMap<>();
 
@@ -120,24 +136,69 @@ public class websocketServer {
     	String receiver =  object.get("tomsg").toString();;
     	String sendMessage = object.get("msg").toString();
     	String text = object.get("text").toString();
-    	long currentTime = System.currentTimeMillis();
-        Date date = new Date(currentTime);
-        JSONObject jsonObj =new JSONObject();
-		jsonObj.put("frommsg", sender);
-		jsonObj.put("tomsg", receiver);
-		jsonObj.put("msg", sendMessage);
-		jsonObj.put("text", text);
-		jsonObj.put("time", date);
+    	String isgroup = object.get("isgroup").toString();
+    	System.out.println("isgroup:" + isgroup); 
     	
-    	//当前用户在线
-    	if (webSocketSet.get(receiver) != null) {	
-    		 if(!id.equals(receiver)) {	
-                webSocketSet.get(receiver).sendMessage(JSON.toJSONString(jsonObj));                           
-    		 }
-    	}
-    	else {  		
-//        	System.out.println("当前用户不在线： " + receiver);
-        	  }	
+    	User user = userService.findUserByUserId(sender);
+		String fromname = user.getLoginName();
+		String avatar = user.getAvatar();
+    		long currentTime = System.currentTimeMillis();
+            Date date = new Date(currentTime);
+            JSONObject jsonObj =new JSONObject();
+    		jsonObj.put("frommsg", sender);
+    		jsonObj.put("tomsg", receiver);
+    		jsonObj.put("msg", sendMessage);
+    		jsonObj.put("text", text);
+    		jsonObj.put("time", date);
+    		jsonObj.put("fromname", fromname);
+    		jsonObj.put("avatar", avatar);
+    		jsonObj.put("isgroup", isgroup);
+        	
+        	//当前用户在线
+    		if(isgroup.equals("0")) {
+    			
+    			System.out.println("1： " + receiver);
+    			
+    			if (webSocketSet.get(receiver) != null) {	
+           		 if(!id.equals(receiver)) {	
+                       webSocketSet.get(receiver).sendMessage(JSON.toJSONString(jsonObj));                           
+           		 }
+           	}
+           	else {  		
+//               	System.out.println("当前用户不在线： " + receiver);
+               	  }	
+        		
+        	}
+    		else {
+    			
+    			String GroupId = receiver;
+    			List<Grouplist> group = chatroomService.FindGroupMembers(GroupId);
+    			System.out.println("groupsize:" + group.size()); 
+    			for (int i = 0; i < group.size(); i++) {
+    				
+    				Grouplist receiver_tmp = group.get(i);
+    				String receiver_tmp_id = receiver_tmp.getMember();
+    				
+    				
+    				
+    				
+    				if (webSocketSet.get(receiver_tmp_id) != null) {
+    					
+    					System.out.println("receiver_tmp:" + receiver_tmp_id); 
+    					
+    	           		 if(!id.equals(receiver_tmp_id)) {	
+    	                       webSocketSet.get(receiver_tmp_id).sendMessage(JSON.toJSONString(jsonObj));                           
+    	           		 }}
+    				
+    			}
+
+//    			return JSON.toJSONString(group);
+        		
+        	}
+        	
+    		
+    	
+    	
     	}
     
 

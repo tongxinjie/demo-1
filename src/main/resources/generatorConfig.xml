@@ -6,7 +6,7 @@
     <javaModelGenerator targetPackage="com.example.demo.pojo" targetProject="demo-1/src/main/java" />
     <sqlMapGenerator targetPackage="com.example.demo.mapping" targetProject="demo-1/src/main/java" />
     <javaClientGenerator targetPackage="com.example.demo.dao" targetProject="demo-1/src/main/java" type="XMLMAPPER" />
-    <table schema="userinfo" tableName="chatroomlist2" domainObjectName="Chatroom">
+    <table schema="userinfo" tableName="grouplist" domainObjectName="Grouplist">
     <!-- 
       <columnOverride column="???" property="???" />
      -->

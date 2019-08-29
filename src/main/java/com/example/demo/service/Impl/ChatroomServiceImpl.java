@@ -8,6 +8,8 @@ import com.example.demo.dao.ChatroomMapper;
 import com.example.demo.pojo.Chat;
 import com.example.demo.pojo.Chatroom;
 import com.example.demo.pojo.ConcatTable;
+import com.example.demo.pojo.GroupTable;
+import com.example.demo.pojo.Grouplist;
 import com.example.demo.service.Chatroomservice;
 
 
@@ -35,5 +37,20 @@ public class ChatroomServiceImpl implements Chatroomservice {
 	
 	public int ResetUnreadNum(String wechatid, String wechathost, int unread){
 		return this.chatroomMapper.setUnreadNum(wechatid, wechathost,unread);
+	}
+	public List<GroupTable> findGroupChatlistByWechatId(String wechatid){
+		return this.chatroomMapper.selectByGroupId(wechatid);
+	}
+	
+	public int ResetGroupUnreadNum(String wechatid,int unread){
+		return this.chatroomMapper.setGroupUnreadNum(wechatid,unread);
+	}
+	
+	public List<Grouplist> FindGroupMembers(String GroupId){
+		return this.chatroomMapper.selectGrouplist(GroupId);
+	}
+	
+	public Grouplist findGroupByGroupId(String GroupId){
+		return this.chatroomMapper.selectNameByGroupId(GroupId);
 	}
 }

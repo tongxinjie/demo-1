@@ -285,5 +285,11 @@
         ORDER BY momentslist.time DESC
 	</select>
 	
+	<insert id="insertNewFriend" parameterType="com.example.demo.pojo.Addr">
+		insert into addrlist (host, userid)
+		values (#{id1,jdbcType=VARCHAR}, #{id2,jdbcType=VARCHAR}
+		)
+	</insert>
+	
 	
 </mapper>

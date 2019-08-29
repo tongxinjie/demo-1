@@ -48,4 +48,8 @@ public class UserServiceImpl implements Userservice {
 	public List<User> findDetailsMoments(String host){
 		return this.userMapper.selectDetailsMoments(host);
 	}
+	
+	public int findUserExistByUserId(String searchId, String myId){
+		return this.userMapper.selectUserExist(searchId, myId);
+	}
 }

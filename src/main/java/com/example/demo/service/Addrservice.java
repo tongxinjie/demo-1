@@ -16,4 +16,5 @@ public interface Addrservice {
 	public List<Addr> findAllAddresslist();
 	public List<Addr> findAllGroups();
 	public List<ConcatMom> FindMomentsList(String userid);
+	public int InsertNewFriend(String id1, String id2);
 }

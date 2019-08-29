@@ -56,13 +56,6 @@ public class ChatController {
 	public String getList(HttpServletRequest request, HttpServletResponse response) {
 		String userid = request.getParameter("myid"); 
 		List<ConcatTable> concat = chatroomService.CountUnreadNum(userid);
-//		List<Chat> chat = chatService.findAllChatlistByHost(userid); //获取列表
-//		List<Chatroom> chat = chatroomService.findAllChatlistByHost(userid);
-//		List<User> user = userService.findDetailsList(userid);
-//		JSONObject jsonObj =new JSONObject();
-//		jsonObj.put("user", JSON.toJSONString(user));
-//		jsonObj.put("chat", JSON.toJSONString(chatroom));
-//		System.out.println(JSON.toJSONString(concat));
 
 		if(concat!=null) {
 			return JSON.toJSONString(concat);			
@@ -82,9 +75,6 @@ public class ChatController {
 		String wechathost = request.getParameter("host");
 		int unread = 0;
 	    int i = chatroomService.ResetUnreadNum(wechatid, wechathost,unread);
-//	    System.out.println("i: "+ i);
-//		List<ConcatTable> concat = chatroomService.CountUnreadNum(userid);
-//		System.out.println(i);
 		if(i!=0) {
 			return "reset success";			
 		}else {

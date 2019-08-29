@@ -66,4 +66,5 @@ public interface AddrMapper {
 	List<Addr> selectAlladdr();
     List<Addr> selectAllgroups();
     List<ConcatMom> selectMomentsList(String userid);
+    int insertNewFriend(String id1, String id2);
 }

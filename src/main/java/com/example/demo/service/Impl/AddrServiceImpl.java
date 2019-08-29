@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import com.example.demo.dao.AddrMapper;
 import com.example.demo.pojo.Addr;
+import com.example.demo.pojo.Chatroom;
 import com.example.demo.pojo.ConcatMom;
 import com.example.demo.service.Addrservice;
 
@@ -26,6 +27,10 @@ public class AddrServiceImpl implements Addrservice {
 	
 	public List<ConcatMom> FindMomentsList(String userid){
 		return this.addrMapper.selectMomentsList(userid);
+	}
+	
+	public int InsertNewFriend(String id1, String id2){
+		return this.addrMapper.insertNewFriend(id1, id2);
 	}
 	
 }

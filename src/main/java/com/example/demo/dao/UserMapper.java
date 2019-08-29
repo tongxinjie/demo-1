@@ -81,5 +81,6 @@ public interface UserMapper {
 	List<User> selectAlladdrByHost(String host);
     List<User> selectAllgroupsByHost(String host);
     List<User> selectDetailsMoments(String host);
+    int selectUserExist(String searchId, String myId);
 	
 }

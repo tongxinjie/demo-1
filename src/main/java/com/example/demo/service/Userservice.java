@@ -30,6 +30,8 @@ public interface Userservice {
 	public List<User> findAllGroupsByHost(String host);
 	public List<User> findAllAddresslistByHost(String host);
 	public List<User> findDetailsMoments(String host);
+	public int findUserExistByUserId(String searchId, String myId);
+	
 }
 
 

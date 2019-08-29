@@ -394,5 +394,11 @@
 		and (momentslist.host = #{host,jdbcType=VARCHAR})
 		order by momentslist.time desc
 	</select>
+	
+	<select id="selectUserExist" parameterType="java.lang.String" resultType="java.lang.Integer">
+	select case when exists
+    (select * from addrlist where host=#{myId,jdbcType=VARCHAR} and userid = #{searchId,jdbcType=VARCHAR})
+    then 1 else 0 end as existence
+	</select>
 
 </mapper>
